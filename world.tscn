@@ -1,0 +1,74 @@
+[gd_scene load_steps=8 format=3 uid="uid://b82dkd0sbks5l"]
+
+[ext_resource type="PackedScene" uid="uid://dyuf3jgvpfar8" path="res://player/player.tscn" id="1_hi2pw"]
+[ext_resource type="PackedScene" uid="uid://ceefmp2fjb2rj" path="res://enemies/poring/poring.tscn" id="2_0vu4b"]
+[ext_resource type="PackedScene" uid="uid://cjswcbq48dybu" path="res://utils/enemySpawner.tscn" id="3_onfpw"]
+[ext_resource type="Script" path="res://utils/spawn-resource.gd" id="4_sfpac"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sr6ik"]
+size = Vector2(34.75, 1155.19)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_81q01"]
+size = Vector2(116.5, 103)
+
+[sub_resource type="Resource" id="Resource_nj71g"]
+script = ExtResource("4_sfpac")
+timeStart = 0
+timeEnd = 60
+enemy = ExtResource("2_0vu4b")
+enemyQty = 1
+enemySpawnDelay = 0
+
+[node name="world" type="Node2D"]
+
+[node name="Walls" type="StaticBody2D" parent="."]
+position = Vector2(-14.5, 343.25)
+collision_mask = 5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls"]
+position = Vector2(34.5, 0)
+shape = SubResource("RectangleShape2D_sr6ik")
+disabled = true
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls"]
+position = Vector2(1182.5, 0)
+shape = SubResource("RectangleShape2D_sr6ik")
+disabled = true
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls"]
+position = Vector2(592.5, 559.75)
+rotation = 1.5708
+shape = SubResource("RectangleShape2D_sr6ik")
+disabled = true
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Walls"]
+position = Vector2(592.5, -563.25)
+rotation = 1.5708
+shape = SubResource("RectangleShape2D_sr6ik")
+disabled = true
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Walls"]
+position = Vector2(14.5, -343.25)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(287, 221)
+shape = SubResource("RectangleShape2D_81q01")
+debug_color = Color(0.288028, 0.62045, 0.328339, 0.419608)
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(545, 401)
+shape = SubResource("RectangleShape2D_81q01")
+debug_color = Color(0.288028, 0.62045, 0.328339, 0.419608)
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls/StaticBody2D"]
+position = Vector2(688, 182)
+shape = SubResource("RectangleShape2D_81q01")
+debug_color = Color(0.288028, 0.62045, 0.328339, 0.419608)
+
+[node name="Player" parent="." instance=ExtResource("1_hi2pw")]
+position = Vector2(510, 297)
+
+[node name="Poring" parent="." instance=ExtResource("2_0vu4b")]
+
+[node name="enemySpawner" parent="." instance=ExtResource("3_onfpw")]
+spawns = Array[ExtResource("4_sfpac")]([SubResource("Resource_nj71g")])
