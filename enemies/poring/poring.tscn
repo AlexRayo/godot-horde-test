@@ -3,14 +3,12 @@
 [ext_resource type="Script" path="res://enemies/poring/enemy.gd" id="1_b2d51"]
 [ext_resource type="Texture2D" uid="uid://d284gfoq3a5f5" path="res://enemies/poring/poring.png" id="1_x2is8"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_5ejcx"]
-radius = 13.0
+[sub_resource type="CircleShape2D" id="CircleShape2D_d3ugv"]
 
 [node name="Poring" type="CharacterBody2D"]
 position = Vector2(116, 54)
 collision_layer = 2
-collision_mask = 3
-motion_mode = 1
+collision_mask = 15
 wall_min_slide_angle = 0.0
 script = ExtResource("1_b2d51")
 
@@ -21,14 +19,36 @@ texture = ExtResource("1_x2is8")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 light_mask = 0
 position = Vector2(0, 1)
-shape = SubResource("CircleShape2D_5ejcx")
+shape = SubResource("CircleShape2D_d3ugv")
+debug_color = Color(0.92549, 0.196078, 0.419608, 0.419608)
 
-[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
-avoidance_enabled = true
-debug_enabled = true
+[node name="RaycastTop" type="RayCast2D" parent="."]
+rotation = -3.15629
+target_position = Vector2(-0.293953, 19.9978)
 
-[node name="Timer" type="Timer" parent="."]
-wait_time = 0.5
-autostart = true
+[node name="RaycastRightTop" type="RayCast2D" parent="."]
+rotation = -1.63445
+target_position = Vector2(9.21643, 12.6118)
 
-[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[node name="RaycastRightCenter" type="RayCast2D" parent="."]
+rotation = -1.63445
+target_position = Vector2(-1.08136, 16.9656)
+
+[node name="RaycastRightBottom" type="RayCast2D" parent="."]
+rotation = -1.63445
+target_position = Vector2(-12.739, 11.2124)
+
+[node name="RaycastBottom" type="RayCast2D" parent="."]
+target_position = Vector2(-1, 21)
+
+[node name="RaycastLeftTop" type="RayCast2D" parent="."]
+rotation = 1.56161
+target_position = Vector2(-9.1098, 11.9168)
+
+[node name="RaycastLeftCenter" type="RayCast2D" parent="."]
+rotation = 1.56161
+target_position = Vector2(0.862232, 15.0085)
+
+[node name="RaycastLeftBottom" type="RayCast2D" parent="."]
+rotation = 1.56161
+target_position = Vector2(10.8802, 13.1004)
