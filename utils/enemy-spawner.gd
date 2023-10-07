@@ -8,10 +8,8 @@ var time = 0
 
 func _on_timer_timeout():
 	time += 1
-	print("timer call")
 	var enemySpawns = spawns
 	for enemy in enemySpawns:
-		print(enemy)
 		if time >= enemy.timeStart and time <= enemy.timeEnd:
 			if enemy.spawnDelayCounter < enemy.enemySpawnDelay:
 				enemy.spawnDelayCounter += 1
