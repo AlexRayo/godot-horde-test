@@ -8,7 +8,7 @@
 [node name="Poring" type="CharacterBody2D"]
 position = Vector2(116, 54)
 collision_layer = 2
-collision_mask = 15
+collision_mask = 3
 wall_min_slide_angle = 0.0
 script = ExtResource("1_b2d51")
 
@@ -22,33 +22,12 @@ position = Vector2(0, 1)
 shape = SubResource("CircleShape2D_d3ugv")
 debug_color = Color(0.92549, 0.196078, 0.419608, 0.419608)
 
-[node name="RaycastTop" type="RayCast2D" parent="."]
-rotation = -3.15629
-target_position = Vector2(-0.293953, 19.9978)
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+path_postprocessing = 1
+debug_enabled = true
 
-[node name="RaycastRightTop" type="RayCast2D" parent="."]
-rotation = -1.63445
-target_position = Vector2(9.21643, 12.6118)
+[node name="Timer" type="Timer" parent="."]
+wait_time = 10.0
+autostart = true
 
-[node name="RaycastRightCenter" type="RayCast2D" parent="."]
-rotation = -1.63445
-target_position = Vector2(-1.08136, 16.9656)
-
-[node name="RaycastRightBottom" type="RayCast2D" parent="."]
-rotation = -1.63445
-target_position = Vector2(-12.739, 11.2124)
-
-[node name="RaycastBottom" type="RayCast2D" parent="."]
-target_position = Vector2(-1, 21)
-
-[node name="RaycastLeftTop" type="RayCast2D" parent="."]
-rotation = 1.56161
-target_position = Vector2(-9.1098, 11.9168)
-
-[node name="RaycastLeftCenter" type="RayCast2D" parent="."]
-rotation = 1.56161
-target_position = Vector2(0.862232, 15.0085)
-
-[node name="RaycastLeftBottom" type="RayCast2D" parent="."]
-rotation = 1.56161
-target_position = Vector2(10.8802, 13.1004)
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

@@ -2,51 +2,30 @@ extends CharacterBody2D
 
 @export var speed = 75
 @export var stopping_distance = 10
-var max_distance_from_object = 50
 
-@onready var player := get_tree().get_first_node_in_group("player")
+var maxDistanceFromObject = 50
 
-@onready var raycast_top := $RaycastTop
-@onready var raycast_right_top := $RaycastRightTop
-@onready var raycast_right_center := $RaycastRightCenter
-@onready var raycast_right_bottom := $RaycastRightBottom
-@onready var raycast_bottom := $RaycastBottom
-@onready var raycast_left_top := $RaycastLeftTop
-@onready var raycast_left_center := $RaycastLeftCenter
-@onready var raycast_left_bottom := $RaycastLeftBottom
+@onready var player : Node2D = get_tree().get_first_node_in_group("player")
+@onready var nav_agent := $NavigationAgent2D as NavigationAgent2D
 
-func _physics_process(delta) -> void:
+func _physics_process(_delta: float) -> void:
 	chase_player()
 	move_and_slide()
-
-func chase_player() -> void:
+	
+func chase_player() -> void:	
 	var distance_to_player = global_position.distance_to(player.global_position)
-	var dir = global_position.direction_to(player.global_position)
-
+	#var dir = global_position.direction_to(player.global_position)
+	
+	var dir = to_local(nav_agent.get_next_path_position()).normalized()
+	
+	#velocity = dir * speed
 	if distance_to_player > stopping_distance:
-		var adjusted_direction = adjust_direction_to_avoid_obstacle(dir)
-		velocity = adjusted_direction * speed
+		velocity = dir * speed
 	else:
 		velocity = Vector2.ZERO
 
-func adjust_direction_to_avoid_obstacle(direction: Vector2) -> Vector2:
-	var adjusted_direction = direction
+func makepath()->void:
+	nav_agent.target_position = player.global_position
 
-	# Verificar cuál de los raycasts está bloqueado y en qué dirección moverse
-	if raycast_top.is_colliding():
-		adjusted_direction.x = 0
-		adjusted_direction.y = 1
-	
-	if raycast_right_top.is_colliding() || raycast_right_center.is_colliding() || raycast_right_bottom.is_colliding():
-		adjusted_direction.x = 0
-		adjusted_direction.y = 1
-
-	if raycast_bottom.is_colliding():
-		adjusted_direction.x = 0
-		adjusted_direction.y = -1
-
-	if raycast_left_top.is_colliding() || raycast_left_center.is_colliding() || raycast_left_bottom.is_colliding():
-		adjusted_direction.x = 1
-		adjusted_direction.y = 0
-
-	return adjusted_direction.normalized()
+func _on_timer_timeout():
+	makepath()
