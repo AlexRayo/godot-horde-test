@@ -8,7 +8,7 @@ radius = 12.0
 height = 56.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_qe4gi"]
-radius = 860.452
+radius = 455.04
 
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 slide_on_ceiling = false
@@ -37,10 +37,8 @@ limit_bottom = 493
 [node name="AttackIceBolt" type="Node" parent="."]
 
 [node name="IceBoltDelayTimer" type="Timer" parent="AttackIceBolt"]
-wait_time = 1.5
 
 [node name="IceBoltSpeedTimer" type="Timer" parent="AttackIceBolt/IceBoltDelayTimer"]
-wait_time = 0.1
 
 [node name="EnemyDetectionArea" type="Area2D" parent="."]
 position = Vector2(-582, -299)

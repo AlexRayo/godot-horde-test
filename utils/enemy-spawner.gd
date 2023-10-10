@@ -1,3 +1,4 @@
+class_name EnemySpawner
 extends Node2D
 
 @export var spawns: Array[SpawnResource] = []

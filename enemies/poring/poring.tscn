@@ -5,10 +5,10 @@
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_d3ugv"]
 
-[node name="Poring" type="CharacterBody2D"]
+[node name="Poring" type="CharacterBody2D" groups=["enemy"]]
 position = Vector2(116, 54)
 collision_layer = 2
-collision_mask = 3
+collision_mask = 2
 wall_min_slide_angle = 0.0
 script = ExtResource("1_b2d51")
 

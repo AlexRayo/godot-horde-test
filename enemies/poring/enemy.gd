@@ -13,12 +13,9 @@ func _physics_process(_delta: float) -> void:
 	move_and_slide()
 	
 func chase_player() -> void:	
-	var distance_to_player = global_position.distance_to(player.global_position)
-	#var dir = global_position.direction_to(player.global_position)
-	
+	var distance_to_player = global_position.distance_to(player.global_position)	
 	var dir = to_local(nav_agent.get_next_path_position()).normalized()
 	
-	#velocity = dir * speed
 	if distance_to_player > stopping_distance:
 		velocity = dir * speed
 	else:

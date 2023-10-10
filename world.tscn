@@ -341,7 +341,7 @@ size = Vector2(34.75, 1155.19)
 [sub_resource type="Resource" id="Resource_nj71g"]
 script = ExtResource("4_sfpac")
 timeStart = 0
-timeEnd = 0
+timeEnd = 60
 enemy = ExtResource("2_0vu4b")
 enemyQty = 1
 enemySpawnDelay = 0

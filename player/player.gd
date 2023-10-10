@@ -1,3 +1,4 @@
+class_name Player
 extends CharacterBody2D
 #TODO:
 #Slow down the speed when player hovers some areas 
@@ -14,11 +15,12 @@ var iceBolt = preload("res://player/skills/ice-bolt.tscn")
 #icebolt
 var icebolt_ammo: int = 0
 var icebolt_baseammo: int = 1
-var icebolt_attackspeed: float = 2
+var icebolt_attackspeed: float = 1
 var icebolt_level: int = 1
 
 #enemy related
-var enemy_close = []
+var enemies_in_range = []
+var closest_enemies:Array = []
 
 func _ready():
 	attack()
@@ -57,25 +59,42 @@ func _on_ice_bolt_speed_timeout():
 		
 
 func get_random_target():
-	if enemy_close.size() > 0 :
-		return enemy_close.pick_random().global_position
+	if enemies_in_range.size() > 0 :
+		var pick_enemy = enemies_in_range.pick_random()
+		var pick_position = pick_enemy.global_position#here tries to pick an erased element
+		#enemies_in_range.erase(pick_enemy)
+		return pick_position
 	else :
 		return Vector2.UP
 
 func _on_enemy_detection_area_body_entered(body):
-	if not enemy_close.has(body):
-		enemy_close.append(body)
+	if !enemies_in_range.has(body):
+		enemies_in_range.append(body)
 
-#func get_closest_target():
-#	if enemy_close.size() > 0:
-#		var closest_enemy = []
-#		for enemy in enemy_close:
-#			closest_enemy.append(enemy.global_position.distance_to(global_position))
-#		return enemy_close[closest_enemy.find(closest_enemy.min())].global_position
-#	else:
-#		return Vector2.DOWN
+func get_closest_target() -> Vector2:
+	var closest_position: Vector2
+	#### WORKING ####
+	if enemies_in_range.size() > 0:
+		var enemies_distance = []
+		for enemy in enemies_in_range:
+			enemies_distance.append(enemy.global_position)
+		var min_distance = closest_enemies.min()
+		var min_index = closest_enemies.find(min_distance)
+		var idx_min = 0
+		for i in range(1,len(enemies_distance)):
+			if enemies_distance[i] < enemies_distance[idx_min]:
+				idx_min = i
+		var closest: CharacterBody2D = enemies_in_range[idx_min]
+		print("idx_min: ", idx_min)
+		closest_position = closest.global_position
+		return closest_position
+	else:
+		return Vector2.DOWN
+
 
 
 func _on_enemy_detection_area_body_exited(body):
-	if enemy_close.has(body):
-		enemy_close.erase(body)
+	pass
+#	print("Enemy eliminated: ", body)
+#	if enemies_in_range.has(body):
+#		enemies_in_range.erase(body)
