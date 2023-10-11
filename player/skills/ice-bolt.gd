@@ -18,7 +18,7 @@ var target_position: Vector2 = Vector2.ZERO
 
 func _ready():
 	target_position = global_position.direction_to(target)
-	rotation = target_position.angle() * deg_to_rad(target_position.angle())
+	rotation = target_position.angle() * deg_to_rad(135)
 	match level:
 		1:
 			hp = 1
@@ -26,7 +26,15 @@ func _ready():
 			damage = 1
 			knock_amount = 100
 			attack_size = 0.2
-
+			
+	#use tween to alternate node values properties
+	#var tween = create_tween().set_parallel(true)#set_parallel(true) if you want to run several tweens
+	#tween.tween_property(self, "scale", Vector2(1,1) * attack_size, 1).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
+	#set the tween(the node, name of the value, set the value of the end result, the time to take this change)
+	#tween.chain() to separete a node from the parallel state
+	#tween.tween_callback(Callable(self, "_on_timer_timeout")) if you want to use a timer node
+	#tween.play()
+	
 func _physics_process(delta):
 	position += target_position * speed * delta
 	
@@ -36,9 +44,6 @@ func enemy_hit(charge = 1):
 		#emit_signal("remove_from_array",self)
 		queue_free()
 
-func _on_timer_timeout():
-	#emit_signal("remove_from_array",self)
-	queue_free()
 
 
 func _on_body_entered(body):
@@ -49,3 +54,8 @@ func _on_body_entered(body):
 		body.queue_free()
 		queue_free()
 	pass # Replace with function body.
+
+
+func _on_timer_timeout():
+	#emit_signal("remove_from_array",self)
+	queue_free()

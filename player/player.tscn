@@ -8,7 +8,7 @@ radius = 12.0
 height = 56.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_qe4gi"]
-radius = 455.04
+radius = 308.015
 
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 slide_on_ceiling = false
@@ -39,16 +39,30 @@ limit_bottom = 493
 [node name="IceBoltDelayTimer" type="Timer" parent="AttackIceBolt"]
 
 [node name="IceBoltSpeedTimer" type="Timer" parent="AttackIceBolt/IceBoltDelayTimer"]
+wait_time = 0.5
 
 [node name="EnemyDetectionArea" type="Area2D" parent="."]
-position = Vector2(-582, -299)
+visible = false
+collision_layer = 2
+collision_mask = 2
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyDetectionArea"]
+shape = SubResource("CircleShape2D_qe4gi")
+
+[node name="TargetArea" type="Area2D" parent="."]
 collision_layer = 2
 collision_mask = 2
 monitorable = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyDetectionArea"]
-position = Vector2(573, 303)
-shape = SubResource("CircleShape2D_qe4gi")
+[node name="Polygon2D" type="Polygon2D" parent="TargetArea"]
+top_level = true
+light_mask = 2
+visibility_layer = 2
+color = Color(0, 0.933333, 0.933333, 0.443137)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TargetArea"]
 
 [connection signal="timeout" from="AttackIceBolt/IceBoltDelayTimer" to="." method="_on_ice_bolt_delay_timer_timeout"]
 [connection signal="timeout" from="AttackIceBolt/IceBoltDelayTimer/IceBoltSpeedTimer" to="." method="_on_ice_bolt_speed_timeout"]
