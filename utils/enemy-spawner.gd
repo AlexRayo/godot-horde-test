@@ -53,8 +53,20 @@ func get_random_position():
 	var xSpawn = randf_range(position1.x, position2.x)
 	var ySpawn = randf_range(position1.y, position2.y)
 	
-	return Vector2(xSpawn, ySpawn)
-			
+	var spawnPosition = Vector2(xSpawn, ySpawn)
 	
+	# Check if the spawn position is inside the Wall layer
+	var space_state = get_world_2d().direct_space_state
+	var query = PhysicsRayQueryParameters2D.create(player.global_position, spawnPosition)
+	query.collision_mask = 1
+	#query.collide_with_bodies = true
+	var result = space_state.intersect_ray(query)
 	
-	
+	#print("ALL RESULTS---> ", result)
+	if result:
+		#print("If result--->",result)
+		# The spawn position is inside the Wall layer, try again
+		return get_random_position()
+	else:
+		print("ENEMY GENERATED")
+		return spawnPosition
