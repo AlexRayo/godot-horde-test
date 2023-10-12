@@ -66,8 +66,8 @@ func get_random_position():
 	if result:
 		await get_tree().create_timer(1).timeout #`await` to avoid recursion
 		return await get_random_position()
-		print("Si el resultado--->", result)
+		#print("Si el resultado--->", result)
 	else:
-		print("ENEMIGO GENERADO")
+		#print("ENEMIGO GENERADO")
 		return spawnPosition
 		# La posición de generación está dentro de la capa de las paredes, intentar de nuevo

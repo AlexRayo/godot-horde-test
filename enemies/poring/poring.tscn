@@ -27,7 +27,6 @@ path_postprocessing = 1
 debug_enabled = true
 
 [node name="Timer" type="Timer" parent="."]
-wait_time = 10.0
 autostart = true
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

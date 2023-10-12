@@ -26,6 +26,8 @@ var closest_enemies:Array = []
 #field of view
 var fov_increment = 2 * PI / 60 # to make the circle view area
 @onready var space_state = get_world_2d().direct_space_state
+var detection_cooldown = 0.25 
+var target_area_drawn = false
 
 func _ready():
 	attack()
@@ -35,10 +37,20 @@ func _physics_process(_delta):
 		Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"),
 		Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")		
 	)
-	velocity = input_vector.normalized() * speed
-	draw_target_area()
+	velocity = input_vector.normalized() * speed	
+	
 	move_and_slide()
-
+	# Solo dibuja el área si no se ha dibujado recientemente
+	if not target_area_drawn and detection_cooldown <= 0:
+		draw_target_area()
+		target_area_drawn = true
+		detection_cooldown = 0.25  # Restablece el tiempo de enfriamiento
+	else:
+		if detection_cooldown > 0:
+			detection_cooldown -= _delta
+			target_area_drawn = false		
+	$FPS_Counter.text = str(Engine.get_frames_per_second()) + " FPS"
+	
 func attack():
 	if icebolt_level > 0:
 		iceBoltDelayTimer.wait_time = icebolt_attackspeed
@@ -100,8 +112,8 @@ func clear_target_area():
 	set_target_area([])
 
 func _on_target_area_body_entered(body):
-	print(body)
-	if !enemies_in_range.has(body):
+	if not enemies_in_range.has(body):
+		print(body)
 		enemies_in_range.append(body)
 		print("enemies_in_range: ",enemies_in_range.size())
 
@@ -114,3 +126,8 @@ func _compare_enemies_by_distance(enemy_a, enemy_b):
 	var distance_a = global_position.distance_to(enemy_a.global_position)
 	var distance_b = global_position.distance_to(enemy_b.global_position)
 	return distance_a - distance_b
+
+
+func _on_timer_timeout():
+	#draw_target_area()
+	pass

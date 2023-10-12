@@ -52,7 +52,20 @@ polygon = PackedVector2Array(-179, -82, -193, 106, 128, 112, 114, -107)
 [node name="Polygon2D" type="Polygon2D" parent="TargetArea"]
 modulate = Color(1, 1, 1, 0.231373)
 
+[node name="ControlTimers" type="Node" parent="."]
+
+[node name="Timer" type="Timer" parent="ControlTimers"]
+wait_time = 0.1
+autostart = true
+
+[node name="FPS_Counter" type="Label" parent="."]
+offset_left = 111.0
+offset_top = 16.0
+offset_right = 299.0
+offset_bottom = 66.0
+
 [connection signal="timeout" from="AttackIceBolt/IceBoltDelayTimer" to="." method="_on_ice_bolt_delay_timer_timeout"]
 [connection signal="timeout" from="AttackIceBolt/IceBoltDelayTimer/IceBoltSpeedTimer" to="." method="_on_ice_bolt_speed_timeout"]
 [connection signal="body_entered" from="TargetArea" to="." method="_on_target_area_body_entered"]
 [connection signal="body_exited" from="TargetArea" to="." method="_on_target_area_body_exited"]
+[connection signal="timeout" from="ControlTimers/Timer" to="." method="_on_timer_timeout"]
