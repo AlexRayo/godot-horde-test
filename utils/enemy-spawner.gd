@@ -20,19 +20,19 @@ func _on_timer_timeout():
 				var counter = 0
 				while counter < enemy.enemyQty:
 					var enemySpawn = newEnemy.instantiate()
-					enemySpawn.global_position = get_random_position()
+					enemySpawn.global_position = await get_random_position()
 					add_child(enemySpawn)
 					counter += 1
 				
 func get_random_position():
-	var viewport = get_viewport_rect().size * randf_range(1.1, 1.4)#gonna get vp size random between this arguments
+	var viewport = get_viewport_rect().size * randf_range(1.1, 1.4) # Obtener el tamaño de la vista aleatoriamente entre estos argumentos
 	
 	var topLeft = Vector2(player.global_position.x - viewport.x / 2, player.global_position.y - viewport.y / 2)
 	var topRight = Vector2(player.global_position.x + viewport.x / 2, player.global_position.y - viewport.y / 2)
 	var bottomRight = Vector2(player.global_position.x + viewport.x / 2, player.global_position.y + viewport.y / 2)
 	var bottomLeft = Vector2(player.global_position.x - viewport.x / 2, player.global_position.y + viewport.y / 2)
 	
-	var pickSide = ["up","right","bottom","left"].pick_random()
+	var pickSide = ["up", "right", "down", "left"].pick_random()
 	var position1 = Vector2.ZERO
 	var position2 = Vector2.ZERO
 	
@@ -55,18 +55,19 @@ func get_random_position():
 	
 	var spawnPosition = Vector2(xSpawn, ySpawn)
 	
-	# Check if the spawn position is inside the Wall layer
+	# Comprobar si la posición de generación está dentro de la capa de las paredes
 	var space_state = get_world_2d().direct_space_state
-	var query = PhysicsRayQueryParameters2D.create(player.global_position, spawnPosition)
+	var query = PhysicsRayQueryParameters2D.new()
+	query.from = player.global_position
+	query.to = spawnPosition
 	query.collision_mask = 1
-	#query.collide_with_bodies = true
 	var result = space_state.intersect_ray(query)
 	
-	#print("ALL RESULTS---> ", result)
 	if result:
-		#print("If result--->",result)
-		# The spawn position is inside the Wall layer, try again
-		return get_random_position()
+		await get_tree().create_timer(1).timeout #`await` to avoid recursion
+		return await get_random_position()
+		print("Si el resultado--->", result)
 	else:
-		print("ENEMY GENERATED")
+		print("ENEMIGO GENERADO")
 		return spawnPosition
+		# La posición de generación está dentro de la capa de las paredes, intentar de nuevo
