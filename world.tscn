@@ -343,7 +343,7 @@ script = ExtResource("4_sfpac")
 timeStart = 0
 timeEnd = 60
 enemy = ExtResource("2_0vu4b")
-enemyQty = 60
+enemyQty = 10
 enemySpawnDelay = 0
 
 [node name="world" type="Node2D"]

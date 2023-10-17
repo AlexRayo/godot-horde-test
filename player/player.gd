@@ -3,7 +3,7 @@ extends CharacterBody2D
 #TODO:
 #Slow down the speed when player hovers some areas 
 
-@export var speed : int = 250 
+@export var speed : int = 50 
 
 #Attacks
 var iceBolt = preload("res://player/skills/ice-bolt.tscn")
@@ -15,7 +15,7 @@ var iceBolt = preload("res://player/skills/ice-bolt.tscn")
 
 #icebolt
 var icebolt_ammo: int = 0
-var icebolt_baseammo: int = 1 #bolts by time
+var icebolt_baseammo: int = 5 #bolts by time
 var icebolt_attackspeed: float = 1
 var icebolt_level: int = 1
 
@@ -26,11 +26,14 @@ var closest_enemies:Array = []
 #field of view
 var fov_increment = 2 * PI / 60 # to make the circle view area
 @onready var space_state = get_world_2d().direct_space_state
-var detection_cooldown = 0.25 
+var detection_cooldown: float = 0.5
+const COOLDOWN:float = 0.5 
 var target_area_drawn = false
+var diccionary : Dictionary = {"name":"Alex", "id":001}
 
 func _ready():
 	attack()
+	print(diccionary.name)
 
 func _physics_process(_delta):
 	var input_vector := Vector2(
@@ -39,12 +42,12 @@ func _physics_process(_delta):
 	)
 	velocity = input_vector.normalized() * speed	
 	
-	move_and_slide()
+	move_and_slide()	
 	# Solo dibuja el área si no se ha dibujado recientemente
 	if not target_area_drawn and detection_cooldown <= 0:
 		draw_target_area()
 		target_area_drawn = true
-		detection_cooldown = 0.25  # Restablece el tiempo de enfriamiento
+		detection_cooldown = COOLDOWN  # Restablece el tiempo de enfriamiento
 	else:
 		if detection_cooldown > 0:
 			detection_cooldown -= _delta
@@ -100,6 +103,9 @@ func get_fov_circle(from: Vector2, radius):
 		angle += fov_increment
 	self.set_z_index(1)
 	return points
+	#when trying do draw the polygon in some corners maybe you will get a NOT crashing error:
+	#canvas_item_add_polygon: Invalid polygon data, tringulation failed
+	#if cooldown to draw the polygon the more this error will appear
 
 func draw_target_area():
 	set_target_area(get_fov_circle(global_position, 300))	
