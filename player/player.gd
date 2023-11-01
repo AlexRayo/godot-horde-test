@@ -4,6 +4,7 @@ extends CharacterBody2D
 #Slow down the speed when player hovers some areas 
 
 @export var speed : int = 50 
+@onready var anim:AnimatedSprite2D = $AnimatedSprite2D
 
 #Attacks
 var iceBolt = preload("res://player/skills/ice-bolt.tscn")
@@ -11,7 +12,6 @@ var iceBolt = preload("res://player/skills/ice-bolt.tscn")
 #Attack nodes
 @onready var iceBoltDelayTimer : Timer = get_node("AttackIceBolt/IceBoltDelayTimer")
 @onready var iceBoltSpeedTimer : Timer = get_node("AttackIceBolt/IceBoltDelayTimer/IceBoltSpeedTimer")
-
 
 #icebolt
 var icebolt_ammo: int = 0
@@ -29,18 +29,31 @@ var fov_increment = 2 * PI / 60 # to make the circle view area
 var detection_cooldown: float = 0.5
 const COOLDOWN:float = 0.5 
 var target_area_drawn = false
-var diccionary : Dictionary = {"name":"Alex", "id":001}
+
 
 func _ready():
 	attack()
-	print(diccionary.name)
-
+	
 func _physics_process(_delta):
-	var input_vector := Vector2(
-		Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"),
-		Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")		
-	)
-	velocity = input_vector.normalized() * speed	
+	var direction : Dictionary = {
+		"x": Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"),
+		"y": Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
+	}
+	var input_vector := Vector2(direction.x, direction.y)
+	velocity = input_vector.normalized() * speed
+	
+	#change animation state
+	if input_vector.x != 0 || input_vector.y != 0:
+		anim.play("run")
+	else:
+		anim.play("idle")
+		
+	#flip horizontaly
+	var isFacingRight = true
+	if direction.x == 1:
+		anim.flip_h = false
+	if direction.x == -1:
+		anim.flip_h = true
 	
 	move_and_slide()	
 	# Solo dibuja el área si no se ha dibujado recientemente
